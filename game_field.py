@@ -84,3 +84,4 @@ def create_Xray_field():
     real_field=return_player_to_x(real_field)
     return real_field
 
+x =67
