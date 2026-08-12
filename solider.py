@@ -20,7 +20,7 @@ def player_collusion_mine(field, player, mine):
             if player[row, col] == mine[row, col]:
                 return True
     return False
-
+x =67
 
 # עובר על אורך המסך ועל הרוחב ואם המיקום של השחקן שווה למיקום של הדגל אז הוא מחזיר נכון
 def player_collusion_flag(field, player, flag):
