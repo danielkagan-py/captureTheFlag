@@ -5,6 +5,15 @@ import pygame
 import consts
 import random
 
+def show_screen_kores():
+    screen = pygame.display.set_mode((consts.w, consts.h))
+    screen.fill((consts.green))
+    screen.fill((consts.green))
+    pygame.display.flip()
+
+def make_xray_screen():
+    print("a")
+#--------------------------------------------------------
 mtrx_bush = []
 def create_random_bushe():
     count = 0
@@ -18,6 +27,7 @@ def create_random_bushe():
                 count += 1
         mtrx_bush.append(is_bush)
     return mtrx_bush
+
 def display():
     while True:
         surface = pygame.display.set_mode((consts.WINDOW_HEIGHT,consts.WINDOW_WIDTH))
@@ -33,6 +43,3 @@ def display():
         pygame.display.flip()
 if __name__ == "__main__":
      display()
-
-
-
