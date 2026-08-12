@@ -1,7 +1,6 @@
-from sys import flags
+import time
 
 import pygame
-from matplotlib.pyplot import flag
 
 import consts
 import game_field
@@ -31,14 +30,16 @@ def handle_user_events():
             state["is_Xray_on"] = True
 
 def is_lose():
-    if solider.player_collusion_mine():
+    if solider.on_mine(xray_field=game_field.create_Xray_field()):
+        state["is_mine_fired"] = True
+        skin_player = consts.injury
         allgame_run = False
 
     return allgame_run
 
 def is_win():
     win = True
-    if solider.player_collusion_flag():
+    if solider.got_flag():
         win = False
     return win
 
