@@ -1,4 +1,8 @@
+from sys import flags
+
 import pygame
+from matplotlib.pyplot import flag
+
 import consts
 import game_field
 import solider
@@ -23,14 +27,34 @@ def handle_user_events():
             dr_x=-1
         if event.type == pygame.KEYRIGHT:
             dr_x=1
+        if event.type == pygame.K_KP_ENTER:
+            state["is_Xray_on"] = True
+
+def is_lose():
+    if solider.player_collusion_mine():
+        allgame_run = False
+
+    return allgame_run
+
+def is_win():
+    win = True
+    if solider.player_collusion_flag():
+        win = False
+    return win
+
 
 allgame_run=False
 
-while allgame_run!=True:
+while allgame_run != False:
     pygame.init()
     game_field.create()
     solider.create()
     while state["is_window_open"]:
         handle_user_events()
+
+        is_lose()
+
+        is_win()
+
 
 
