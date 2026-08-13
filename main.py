@@ -1,7 +1,7 @@
 from sys import flags
 
 import pygame
-
+from pygame.locals import *
 import screen
 import consts
 import game_field
@@ -15,21 +15,7 @@ state = {
     "is_Xray_on":False
 }
 def handle_user_events():
-    for event in pygame.event.get():
-
-        if event.type == pygame.QUIT:
-            state["is_window_open"] = False
-        if event.type == pygame.KEYDOWN:
-            dr_y=1
-        if event.type == pygame.KEYUP:
-            dr_y=-1
-        if event.type == pygame.KEYLEFT:
-            dr_x=-1
-        if event.type == pygame.KEYRIGHT:
-            dr_x=1
-        if event.type == pygame.K_KP_ENTER:
-            state["is_Xray_on"] = True
-
+    pass
 def is_lose():
     if solider.player_collusion_mine():
         allgame_run = False
@@ -42,15 +28,57 @@ def is_win():
         win = False
     return win
 
+def main():
+    window =screen.show_screen()
+    pygame.display.set_caption('THE game')
+    image = consts.player
+    image = pygame.transform.scale(image, (90,90))
 
-allgame_run=False
+    velocity = 30
+    x = 0
+    y = 0
+    clock = pygame.time.Clock()
 
-while allgame_run != False:
     pygame.init()
-    game_field.create()
-    solider.create()
+    field = game_field.create_regular_field
     while state["is_window_open"]:
-        handle_user_events()
+        clock.tick(60)
+        window.blit(image, (x, y))
+
+        pygame.init()
 
 
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_KP_ENTER:
+                    x += velocity
+                    print("asas")
+                    window = screen.show_screen()
+                    print(x, y)
+                if event.key == pygame.K_LEFT:
+                    x -= velocity
+                    window = screen.show_screen()
+                    print(x,y)
+                if event.key == pygame.K_RIGHT:
+                    x += velocity
+                    window = screen.show_screen()
+                    print(x, y)
+                if event.key == pygame.K_UP:
+                    y -= velocity
+                    window = screen.show_screen()
+                    print(x, y)
+                if event.key == pygame.K_DOWN:
+                    y += velocity
+                    window = screen.show_screen()
+                    print(x, y)
+        pygame.display.update()
+
+
+main()
 
