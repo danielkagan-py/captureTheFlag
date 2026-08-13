@@ -1,3 +1,4 @@
+import time
 from sys import flags
 
 import pygame
@@ -28,13 +29,19 @@ def is_win():
         win = False
     return win
 
+
+
+
 def main():
     window =screen.show_screen()
     pygame.display.set_caption('THE game')
     image = consts.player
     image = pygame.transform.scale(image, (90,90))
+    imageflag = consts.flag
+    imageflag = pygame.transform.scale(imageflag, (90, 90))
 
-    velocity = 30
+
+    velocity = 28
     x = 0
     y = 0
     clock = pygame.time.Clock()
@@ -42,8 +49,11 @@ def main():
     pygame.init()
     field = game_field.create_regular_field
     while state["is_window_open"]:
+
+
         clock.tick(60)
         window.blit(image, (x, y))
+        window.blit(imageflag, (1300, 600))
 
         pygame.init()
 
@@ -56,27 +66,43 @@ def main():
                 quit()
             if event.type == pygame.KEYDOWN:
 
-                if event.key == pygame.K_KP_ENTER:
-                    x += velocity
-                    print("asas")
+                if event.key == pygame.K_RETURN:
+                    state["is_Xray_on"]==True
+                    window=screen.show_mines()
                     window = screen.show_screen()
-                    print(x, y)
+
+
+
                 if event.key == pygame.K_LEFT:
-                    x -= velocity
-                    window = screen.show_screen()
-                    print(x,y)
+                    if x>0:
+                        x -= velocity
+                        window = screen.show_screen()
+                        print(x, y)
+                    else:
+                        print("no")
+
                 if event.key == pygame.K_RIGHT:
-                    x += velocity
-                    window = screen.show_screen()
-                    print(x, y)
+                    if x<1320:
+                        x += velocity
+                        window = screen.show_screen()
+                        print(x, y)
+                    else:
+                        print("no")
+
                 if event.key == pygame.K_UP:
-                    y -= velocity
-                    window = screen.show_screen()
-                    print(x, y)
+                    if y > 0:
+                        y -= velocity
+                        window = screen.show_screen()
+                        print(x, y)
+                    else:
+                        print("no")
                 if event.key == pygame.K_DOWN:
-                    y += velocity
-                    window = screen.show_screen()
-                    print(x, y)
+                    if y < 600:
+                        y += velocity
+                        window = screen.show_screen()
+                        print(x, y)
+                    else:
+                        print("no")
         pygame.display.update()
 
 
