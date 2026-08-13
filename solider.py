@@ -1,12 +1,11 @@
 import pygame
-
 import consts
 import game_field
 
 # ---------------------------------------------------------------------------------------------------------------------------------------
 def create():
-    skin_player = consts.player
-    return skin_player
+    player = consts.player
+    return player
 # ---------------------------------------------------------------------------------------------------------------------------------------
 def create_spawn(player):
     field = game_field.create_regular_field()
@@ -17,21 +16,36 @@ def create_spawn(player):
 
     return spawn_player
 # ---------------------------------------------------------------------------------------------------------------------------------------
-def player_move(player, spawn_player):
-    location = spawn_player
-    field = game_field.create_regular_field()
+def player_move(board):
+    x , y = get_legs(board)
     for event in pygame.event.get():
-        for row in range(len(field)):
-            for col in range(len(field[row])):
+        for col in range(len(board)):
+            for row in range(len(board[col])):
                 if event.type == pygame.K_DOWN:
-                    location = (row + 1, col)
+                    if out_of_board(x , y + 1):
+                        pass
+                    else:
+                        board[y+1][x] = "player"
+                        board[y][x] = "x"
                 if event.type == pygame.K_UP:
-                    location = (row - 1, col)
+                    if out_of_board(x , y - 1):
+                        pass
+                    else:
+                        board[y-1][x] = "player"
+                        board[y][x] = "x"
                 if event.type == pygame.K_RIGHT:
-                    location = (row, col + 1)
+                    if out_of_board(x + 2, y):
+                        pass
+                    else:
+                        board[y][x + 2] = "player"
+                        board[y][x] = "x"
                 if event.type == pygame.K_LEFT:
-                    location = (row, col - 1)
-    return location
+                    if out_of_board(x - 1, y):
+                        pass
+                    else:
+                        board[y][x - 1] = "player"
+                        board[y][x + 1] = "x"
+    return board
 # ---------------------------------------------------------------------------------------------------------------------------------------
 # מחזיר TRUE אם השחקן על הפצצה
 # אחרת מחזיר FALSE
@@ -57,8 +71,8 @@ def got_flag(playerX , playerY , xray_field):
 def out_of_board(playerX , playerY):
     if playerX < 0 or playerX >49:
         if playerY < 0 or playerY > 24:
-            return False
-        else :
+            return True
+        else:
             ariel = 67
     else :
         return False
@@ -70,9 +84,10 @@ def get_legs(currnt_board):
     for col in range (len(currnt_board)):
         for row in range (len(currnt_board[col])):
             if currnt_board[col][row] == "player":
+                #player_locatin = (row, col)
                 lastRow = row
                 lastCol = col
-    return lastRow-1 , lastCol
+    return lastRow-1 , lastCol # player_locatin = (row-1, col)
 #---------------------------------------------------------------------------------------------------------------------------------------
 #מחזיר את הפינה השמאלית העליונה של הגוף
 def get_body(currnt_board):
@@ -89,4 +104,4 @@ def get_body(currnt_board):
                     break
         else:
             break
-    return firstRow,firstCol
+    return firstRow,firstCol #להתייחס לחייל רק בתור רגליים ולא בתור גוף

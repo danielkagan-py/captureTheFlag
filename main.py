@@ -1,9 +1,11 @@
 import time
+from time import sleep
 
 import pygame
 
 import consts
 import game_field
+import screen
 import solider
 
 state = {
@@ -32,7 +34,6 @@ def handle_user_events():
 def is_lose():
     if solider.on_mine(xray_field=game_field.create_Xray_field()):
         state["is_mine_fired"] = True
-        skin_player = consts.injury
         allgame_run = False
 
     return allgame_run
@@ -53,9 +54,15 @@ while allgame_run != False:
     while state["is_window_open"]:
         handle_user_events()
 
-        is_lose()
+        if state["is_Xray_on"] == True:
+            screen.make_xray_screen()
 
-        is_win()
+        while solider.player_move(board=screen.show_screen_kores()):
+            if solider.on_mine(xray_field=screen.make_xray_screen()):
+                is_lose()
 
+        if is_lose():
+            pass
 
-
+        if is_win():
+            pass

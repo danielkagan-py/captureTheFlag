@@ -12,4 +12,3 @@ LOSE_MESSAGE = "You lose!"
 mine = pygame.image.load("pics/mine.png")
 player = pygame.image.load("pics/soldier.png")
 flag = pygame.image.load("pics/flag.png")
-injury = pygame.image.load("pics/injury.png")
