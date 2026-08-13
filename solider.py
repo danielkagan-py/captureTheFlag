@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from dataclasses import field
 from itertools import count
 import pygame
@@ -90,11 +89,3 @@ def player_move(board):
 #         else:
 #             break
 #     return firstRow,firstCol
-=======
-import pygame
-
-
-player=pygame.image.load("pics/soldier.png")
-
-
->>>>>>> bcb2d4064f2e2dba79ba3df39732cbcbb81af0c6

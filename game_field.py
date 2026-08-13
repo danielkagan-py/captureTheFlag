@@ -1,5 +1,4 @@
 import consts
-<<<<<<< HEAD
 import random
 #---------------------------------------------------------------------------------------------------------------------------------------
 def create_empty_field():
@@ -88,7 +87,3 @@ def create_Xray_field():
    return real_field
 #---------------------------------------------------------------------------------------------------------------------------------------
 print_field(create_Xray_field())
-=======
-def create_field():
-    print("hello world, daniel")
->>>>>>> bcb2d4064f2e2dba79ba3df39732cbcbb81af0c6
