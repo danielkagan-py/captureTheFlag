@@ -1,6 +1,7 @@
 from dataclasses import field
 from itertools import count
 import pygame
+import game_field
 PLAYER_IMG = pygame.image.load("pics/soldier.png")
 #---------------------------------------------------------------------------------------------------------------------------------------
 # מחזיר TRUE אם השחקן על הפצצה
@@ -32,15 +33,15 @@ def out_of_board(playerX , playerY):
 #---------------------------------------------------------------------------------------------------------------------------------------
 #מחזיר את הרגל השמאלית של השחקן ב (X,Y)
 def get_legs(currnt_board):
-    # lastRow = 0
-    # lastCol = 0
+    lastRow = 0
+    lastCol = 0
     for col in range (len(currnt_board)):
         for row in range (len(currnt_board[col])):
             if currnt_board[col][row] == "player":
                 cords = (row-1, col)
-                # lastRow = row
-                # lastCol = col
-    return cords #lastRow-1 , lastCol
+                lastRow = row
+                lastCol = col
+    return lastRow-1 , lastCol
 #---------------------------------------------------------------------------------------------------------------------------------------
 def player_move(board):
     x , y = get_legs(board)

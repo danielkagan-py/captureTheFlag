@@ -1,6 +1,10 @@
+from sys import flags
 import pygame
+from pygame.locals import *
+import screen
 import consts
 import game_field
+import time
 import solider
 #---------------------------------------------------------------------------------------------------------------------------------------
 state = {
@@ -38,13 +42,66 @@ def is_win(): #
         win = True
     return win
 #---------------------------------------------------------------------------------------------------------------------------------------
-allgame_run=False
-while allgame_run!=True:
-    pygame.init()
-    game_field.create()
-    solider.create()
-    while state["is_window_open"]:
-        handle_user_events()
+def main():
+   window =screen.show_screen()
+   pygame.display.set_caption('THE game')
+   image = consts.player
+   image = pygame.transform.scale(image, (90,90))
+   imageflag = consts.flag
+   imageflag = pygame.transform.scale(imageflag, (90, 90))
+   velocity = 28
+   x = 0
+   y = 0
+   clock = pygame.time.Clock()
+   pygame.init()
+   field = game_field.create_regular_field
+   while state["is_window_open"]:
+       clock.tick(60)
+       window.blit(image, (x, y))
+       window.blit(imageflag, (1300, 600))
+       pygame.init()
+       for event in pygame.event.get():
+           if event.type == pygame.QUIT:
+               pygame.quit()
+               quit()
+           if event.type == pygame.KEYDOWN:
+               if event.key == pygame.K_RETURN:
+                   state["is_Xray_on"] == True
+                   clock.tick(1)
+                   screen.show_mines()
+                   time.sleep(1)
+                   window = screen.show_screen()
+               if event.key == pygame.K_LEFT:
+                   if x > 0:
+                       x -= velocity
+                       window = screen.show_screen()
+                       print(x, y)
+                   else:
+                       x=x
+               if event.key == pygame.K_RIGHT:
+                   if x<1320:
+                       x += velocity
+                       window = screen.show_screen()
+                       print(x, y)
+                   else:
+                       x=x
+               if event.key == pygame.K_UP:
+                   if y > 0:
+                       y -= velocity
+                       window = screen.show_screen()
+                       print(x, y)
+                   else:
+                       y=y
+               if event.key == pygame.K_DOWN:
+                   if y < 600:
+                       y += velocity
+                       window = screen.show_screen()
+                       print(x, y)
+                   else:
+                       y=y
+       pygame.display.update()
+#---------------------------------------------------------------------------------------------------------------------------------------
+main()
 #---------------------------------------------------------------------------------------------------------------------------------------
 import pathfinding
 # def   find_path():
