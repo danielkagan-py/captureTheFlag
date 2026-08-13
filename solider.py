@@ -23,50 +23,45 @@ def player_move(board):
             for row in range(len(board[col])):
                 if event.type == pygame.K_DOWN:
                     if out_of_board(x , y + 1):
-                        pass
+                        y = 24
                     else:
                         board[y+1][x] = "player"
                         board[y][x] = "x"
                 if event.type == pygame.K_UP:
                     if out_of_board(x , y - 1):
-                        pass
+                        y = 0
                     else:
                         board[y-1][x] = "player"
                         board[y][x] = "x"
                 if event.type == pygame.K_RIGHT:
                     if out_of_board(x + 2, y):
-                        pass
+                        x = 49
                     else:
                         board[y][x + 2] = "player"
                         board[y][x] = "x"
                 if event.type == pygame.K_LEFT:
                     if out_of_board(x - 1, y):
-                        pass
+                        x = 0
                     else:
                         board[y][x - 1] = "player"
                         board[y][x + 1] = "x"
     return board
 # ---------------------------------------------------------------------------------------------------------------------------------------
-# מחזיר TRUE אם השחקן על הפצצה
-# אחרת מחזיר FALSE
-def on_mine(xray_field):
-    count = 0
-    for row in range(len(xray_field)):
-        for col in range(row):
-            if col == "mine":
-                count += 1
-    if count != 20:
-        return True
-    else:
-        return False
+#עובר על אורך המסך ועל הרוחב ואם המיקום של השחקן שווה למיקום של המוקש אז הוא מחזיר נכון
+def player_collusion_mine(field, player, mine):
+    for row in range(field.height):
+        for col in range(field.width):
+            if player[row, col] == mine[row, col]:
+                return True
+    return False
 # ---------------------------------------------------------------------------------------------------------------------------------------
-# אם המיקום של השחקן נמצא על תא של FLAG יוחזר TRUE
-# אם השחקן לא נמצא על הדגל יוחזר FALSE
-def got_flag(playerX , playerY , xray_field):
-    got_flag = False
-    if xray_field[playerY][playerX] == "flag":
-                got_flag = True
-    return got_flag
+# עובר על אורך המסך ועל הרוחב ואם המיקום של השחקן שווה למיקום של הדגל אז הוא מחזיר נכון
+def player_collusion_flag(field, player, flag):
+    for row in range(field.height):
+        for col in range(field.width):
+            if player[row, col] == flag[row, col]:
+                return True
+    return False
 #---------------------------------------------------------------------------------------------------------------------------------------
 def out_of_board(playerX , playerY):
     if playerX < 0 or playerX >49:
