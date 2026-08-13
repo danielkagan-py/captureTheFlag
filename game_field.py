@@ -85,4 +85,5 @@ def create_Xray_field():
    real_field = add_mines(real_field)
    real_field=return_player_to_x(real_field)
    return real_field
+#---------------------------------------------------------------------------------------------------------------------------------------
 print_field(create_Xray_field())
