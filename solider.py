@@ -1,20 +1,13 @@
-from dataclasses import field
-from itertools import count
 import pygame
 PLAYER_IMG = pygame.image.load("pics/soldier.png")
 #---------------------------------------------------------------------------------------------------------------------------------------
 # מחזיר TRUE אם השחקן על הפצצה
 # אחרת מחזיר FALSE
-def on_mine(xray_field):
-    count = 0
-    for row in range(len(xray_field)):
-        for col in range(row):
-            if col == "mine":
-                count += 1
-    if count != 20:
-        return True
-    else:
-        return False
+def on_mine(playerX, playerY, xray_field):
+    if 0 <= playerY < len(xray_field) and 0 <= playerX < len(xray_field[playerY]):
+        if xray_field[playerY][playerX] == "mine":
+            return True
+    return False
 #---------------------------------------------------------------------------------------------------------------------------------------
 # אם המיקום של השחקן נמצא על תא של FLAG יוחזר TRUE
 # אם השחקן לא נמצא על הדגל יוחזר FALSE
@@ -32,15 +25,14 @@ def out_of_board(playerX , playerY):
 #---------------------------------------------------------------------------------------------------------------------------------------
 #מחזיר את הרגל השמאלית של השחקן ב (X,Y)
 def get_legs(currnt_board):
-    # lastRow = 0
-    # lastCol = 0
-    for col in range (len(currnt_board)):
-        for row in range (len(currnt_board[col])):
-            if currnt_board[col][row] == "player":
-                cords = (row-1, col)
-                # lastRow = row
-                # lastCol = col
-    return cords #lastRow-1 , lastCol
+    lastRow = 0
+    lastCol = 0
+    for row in range (len(currnt_board)):
+        for col in range (len(currnt_board[row])):
+            if currnt_board[row][col] == "player":
+                lastRow = row
+                lastCol = col
+    return lastRow , lastCol
 #---------------------------------------------------------------------------------------------------------------------------------------
 def player_move(board):
     x , y = get_legs(board)
@@ -73,19 +65,3 @@ def player_move(board):
                         board[y][x + 1] = "x"
     return board
 #---------------------------------------------------------------------------------------------------------------------------------------
-# מחזיר את הפינה השמאלית העליונה של הגוף
-# def get_body(currnt_board):
-#     firstRow = 0
-#     firstCol = 0
-#     k = 0
-#     for col in range (len(currnt_board)):
-#         if k == 0 :
-#             for row in range (len(currnt_board[col])):
-#                 if currnt_board[col][row] == "player":
-#                     firstRow = row
-#                     firstCol = col
-#                     k=1
-#                     break
-#         else:
-#             break
-#     return firstRow,firstCol
