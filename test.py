@@ -8,7 +8,7 @@ pygame.init()
 
 # create the display surface object
 # of specific dimension.
-window = pygame.display.set_mode((600, 600))
+window = pygame.display.set_mode((900, 600))
 
 # Add caption in the window
 pygame.display.set_caption('Player Movement')

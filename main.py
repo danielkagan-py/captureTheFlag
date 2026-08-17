@@ -1,110 +1,148 @@
-import time
 from sys import flags
-
 import pygame
 from pygame.locals import *
 import screen
 import consts
 import game_field
+import time
 import solider
-
+#---------------------------------------------------------------------------------------------------------------------------------------
 state = {
-    "is_mine_fired": False,
-    "is_window_open": True,
-    "state": consts.RUNNING_STATE,
-    "is_flag_captured": False,
-    "is_Xray_on":False
+  "is_mine_fired": False,
+  "is_window_open": True,
+  "state": consts.RUNNING_STATE,
+  "is_flag_captured": False,
+  "is_Xray_on":False
 }
+#---------------------------------------------------------------------------------------------------------------------------------------
 def handle_user_events():
-    pass
-def is_lose():
-    if solider.player_collusion_mine():
-        allgame_run = False
+  for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+          state["is_window_open"] = False
+      if event.type == pygame.KEYDOWN:
+          dr_y=1
+      if event.type == pygame.KEYUP:
+          dr_y=-1
+      if event.type == pygame.KEYLEFT:
+          dr_x=-1
+      if event.type == pygame.KEYRIGHT:
+          dr_x=1
+      if event.type == pygame.K_KP_ENTER:
+          state["is_Xray_on"] = True
+#---------------------------------------------------------------------------------------------------------------------------------------
+def is_lose(image,x,y):
 
-    return allgame_run
-
-def is_win():
-    win = True
-    if solider.player_collusion_flag():
-        win = False
-    return win
-
-
-
+    window = screen.show_screen()
+    window.blit(image, (x, y))
+    font = pygame.font.SysFont("Arial", 120)
+    text = font.render(consts.LOSE_MESSAGE, True, (255, 0, 0))
+    window.blit(text, (consts.screen_w // 3, consts.screen_h // 3))
+    pygame.display.update()
+    time.sleep(3)
+    pygame.quit()
+    quit()
+#---------------------------------------------------------------------------------------------------------------------------------------
+def is_win(image,x,y): #
+    window = screen.show_screen()
+    window.blit(image, (x, y))
+    font = pygame.font.SysFont("Arial", 120)
+    text = font.render(consts.WIN_MESSAGE, True, (0, 0, 255))
+    window.blit(text, (consts.screen_w // 3, consts.screen_h // 3))
+    pygame.display.update()
+    time.sleep(3)
+    pygame.quit()
+    quit()
+#---------------------------------------------------------------------------------------------------------------------------------------
 
 def main():
-    window =screen.show_screen()
-    pygame.display.set_caption('THE game')
-    image = consts.player
-    image = pygame.transform.scale(image, (90,90))
-    imageflag = consts.flag
-    imageflag = pygame.transform.scale(imageflag, (90, 90))
+  pygame.init()
+  window = screen.show_screen()
+  pygame.display.set_caption('THE game')
+  image = consts.player
+  image = pygame.transform.scale(image, ((consts.pixel*2, consts.pixel*4)))
+  imageflag = consts.flag
+  imageflag = pygame.transform.scale(imageflag, (consts.pixel * 3, consts.pixel *4))
+  velocity = consts.pixel
+  x = 0
+  y = 0
+  clock = pygame.time.Clock()
+  field = game_field.create_regular_field()
+  xray_field_fixed =screen.field1
+  while state["is_window_open"]:
+      clock.tick(60)
+      window.blit(image, (x, y))
+      #window.blit(imageflag, (1344, 616))
+      window.blit(imageflag, (consts.pixel * (consts.COL - 4),consts.pixel *( consts.ROWS - 4)))
+      #nt(consts.pixel * (consts.COL - 4))
+      #print(consts.pixel *( consts.ROWS - 4))
 
 
-    velocity = 28
-    x = 0
-    y = 0
-    clock = pygame.time.Clock()
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              pygame.quit()
+              quit()
+          if event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_RETURN:
+                  state["is_Xray_on"] = True
+                  screen.show_mines()
+                  new_player_img = consts.night_player
+                  new_player_img = pygame.transform.scale(new_player_img, (consts.pixel*2, consts.pixel*4))
+                  window.blit(new_player_img, (x, y))
 
-    pygame.init()
-    field = game_field.create_regular_field
-    while state["is_window_open"]:
+                  pygame.display.update()
+                  time.sleep(1)
+                  window = screen.show_screen()
+                  state["is_Xray_on"] = False
+              moved = False
+              next_x = x
+              next_y = y
 
+              if event.key == pygame.K_LEFT:
+                  if x > 0:
+                      next_x -= velocity
+                      moved = True
+              if event.key == pygame.K_RIGHT:
+                  if x < 1344:
+                      next_x += velocity
+                      moved = True
+              if event.key == pygame.K_UP:
+                  if y > 0:
+                      next_y -= velocity
+                      moved = True
+              if event.key == pygame.K_DOWN:
+                  if y < 588:
+                      next_y += velocity
+                      moved = True
 
-        clock.tick(60)
-        window.blit(image, (x, y))
-        window.blit(imageflag, (1300, 600))
+              if moved:
+                  matrix_x = next_x // consts.pixel
+                  matrix_y = (next_y // consts.pixel) + 3
+                  if solider.on_mine(matrix_x, matrix_y, xray_field_fixed) or solider.on_mine(matrix_x + 1, matrix_y,xray_field_fixed):
+                     is_lose(image,x,y)
 
-        pygame.init()
+                  elif solider.got_flag(matrix_x, matrix_y, xray_field_fixed) or solider.got_flag(matrix_x + 1,matrix_y,xray_field_fixed) or (next_x >= 1316 and next_y >= 588):
+                    is_win(image,x,y)
 
-
-        for event in pygame.event.get():
-
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-                quit()
-            if event.type == pygame.KEYDOWN:
-
-                if event.key == pygame.K_RETURN:
-                    state["is_Xray_on"]==True
-                    window=screen.show_mines()
-                    window = screen.show_screen()
-
-
-
-                if event.key == pygame.K_LEFT:
-                    if x>0:
-                        x -= velocity
-                        window = screen.show_screen()
-                        print(x, y)
-                    else:
-                        print("no")
-
-                if event.key == pygame.K_RIGHT:
-                    if x<1320:
-                        x += velocity
-                        window = screen.show_screen()
-                        print(x, y)
-                    else:
-                        print("no")
-
-                if event.key == pygame.K_UP:
-                    if y > 0:
-                        y -= velocity
-                        window = screen.show_screen()
-                        print(x, y)
-                    else:
-                        print("no")
-                if event.key == pygame.K_DOWN:
-                    if y < 600:
-                        y += velocity
-                        window = screen.show_screen()
-                        print(x, y)
-                    else:
-                        print("no")
-        pygame.display.update()
+                  else:
+                      x = next_x
+                      y = next_y
+                      window = screen.show_screen()
+                      old_y, old_x = solider.get_legs(field)
+                      field[old_y][old_x] = "x"
+                      field[old_y][old_x - 1] = "x"
+                      field[matrix_y][matrix_x] = "player"
+                      field[matrix_y][matrix_x + 1] = "player"
+                      old_y_xray, old_x_xray = solider.get_legs(xray_field_fixed)
+                      xray_field_fixed[old_y_xray][old_x_xray] = "x"
+                      xray_field_fixed[old_y_xray][old_x_xray - 1] = "x"
+                      xray_field_fixed[matrix_y][matrix_x] = "player"
+                      xray_field_fixed[matrix_y][matrix_x + 1] = "player"
 
 
+
+      pygame.display.update()
+#---------------------------------------------------------------------------------------------------------------------------------------
 main()
+
+
 

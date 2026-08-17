@@ -48,6 +48,7 @@ def add_mines(field):
    return field
 #---------------------------------------------------------------------------------------------------------------------------------------
 def add_grass(field):
+
    for i in range(0,20):
        y=random.randrange(0,consts.matriz_rows)
        x=random.randrange(0,consts.matriz_cols)
@@ -85,4 +86,36 @@ def create_Xray_field():
    real_field = add_mines(real_field)
    real_field=return_player_to_x(real_field)
    return real_field
+#---------------------------------------------------------------------------------------------------------------------------------------
+def is_path_exists(field):
+    start_pos = (0, 0)
+    positions_to_check = [start_pos]
+    visited = []
+    visited.append(start_pos)
+    while len(positions_to_check) > 0:
+        current_pos = positions_to_check.pop()
+        y = current_pos[0]
+        x = current_pos[1]
 
+        if field[y][x] == "flag" or field[y][x + 1] == "flag":
+            return True
+
+        moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        for move in moves:
+            dy = move[0]
+            dx = move[1]
+            ny = y + dy
+            nx = x + dx
+            if 0 <= ny < consts.matriz_rows and 0 <= nx < consts.matriz_cols - 1:
+                if field[ny][nx] != "mine" and field[ny][nx + 1] != "mine":
+                    if (ny, nx) not in visited:
+                        visited.append((ny, nx))
+                        positions_to_check.append((ny, nx))
+    return False
+#---------------------------------------------------------------------------------------------------------------------------------------
+def create_good_Xray_field():
+    while True:
+        test_field = create_Xray_field()
+        if is_path_exists(test_field):
+            return test_field
+#---------------------------------------------------------------------------------------------------------------------------------------
