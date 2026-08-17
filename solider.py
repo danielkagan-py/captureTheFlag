@@ -17,13 +17,14 @@ def got_flag(playerX , playerY , xray_field):
                 got_flag = True
     return got_flag
 #---------------------------------------------------------------------------------------------------------------------------------------
+# בודק אם השחקן מחוץ ללוח
 def out_of_board(playerX , playerY):
     if playerX < 0 or playerX >49 or playerY < 0 or playerY > 24:
         return True
     else:
         return False
 #---------------------------------------------------------------------------------------------------------------------------------------
-#מחזיר את הרגל השמאלית של השחקן ב (X,Y)
+# משיג את המיקום של הרגליים בלוח
 def get_legs(currnt_board):
     lastRow = 0
     lastCol = 0
@@ -33,35 +34,3 @@ def get_legs(currnt_board):
                 lastRow = row
                 lastCol = col
     return lastRow , lastCol
-#---------------------------------------------------------------------------------------------------------------------------------------
-def player_move(board):
-    x , y = get_legs(board)
-    for event in pygame.event.get():
-        for col in range(len(board)):
-            for row in range(len(board[col])):
-                if event.type == pygame.K_DOWN:
-                    if out_of_board(x , y + 1):
-                        pass
-                    else:
-                        board[y+1][x] = "player"
-                        board[y][x] = "x"
-                if event.type == pygame.K_UP:
-                    if out_of_board(x , y - 1):
-                        pass
-                    else:
-                        board[y-1][x] = "player"
-                        board[y][x] = "x"
-                if event.type == pygame.K_RIGHT:
-                    if out_of_board(x + 2, y):
-                        pass
-                    else:
-                        board[y][x + 2] = "player"
-                        board[y][x] = "x"
-                if event.type == pygame.K_LEFT:
-                    if out_of_board(x - 1, y):
-                        pass
-                    else:
-                        board[y][x - 1] = "player"
-                        board[y][x + 1] = "x"
-    return board
-#---------------------------------------------------------------------------------------------------------------------------------------

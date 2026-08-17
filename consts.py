@@ -16,7 +16,7 @@ WIN_MESSAGE = "You win!"
 LOSE_MESSAGE = "You lose!"
 mine = pygame.image.load("pics/mine.png")
 player = pygame.image.load("pics/soldier.png")
+player2 = pygame.image.load("pics/soldier (2).png")
 night_player = pygame.image.load("pics/soldier_nigth.png")
 flag = pygame.image.load("pics/flag.png")
 grass=pygame.image.load("pics/grass.png")
-
