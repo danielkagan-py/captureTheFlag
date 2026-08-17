@@ -1,4 +1,7 @@
 import pygame
+from pynput import keyboard
+import os
+import database
 import screen
 import consts
 import game_field
@@ -41,6 +44,8 @@ def is_win(image,x,y):
 #---------------------------------------------------------------------------------------------------------------------------------------
 # המחלקה הראשית שמריצה את המשחק
 def main():
+  t = 0
+  clock = pygame.time.Clock()
   pygame.init()
   window = screen.show_screen()
   pygame.display.set_caption('THE game')
@@ -76,6 +81,54 @@ def main():
               moved = False
               next_x = x
               next_y = y
+
+              if event.key == pygame.K_1 or event.key ==pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9:  # key 'a'
+                t = time.time()
+          if event.type == pygame.KEYUP:
+              if event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9:  # key 'a  # key 'a'
+                  t = time.time() - t
+                  t = str(t)
+                  t = int(t[:1])
+
+              if t >= 1:
+                  if event.key == pygame.K_1:
+                      database.save(1)
+                  if event.key == pygame.K_2:
+                      database.save(2)
+                  if event.key == pygame.K_3:
+                      database.save(3)
+                  if event.key == pygame.K_4:
+                      database.save(4)
+                  if event.key == pygame.K_5:
+                      database.save(5)
+                  if event.key == pygame.K_6:
+                      database.save(6)
+                  if event.key == pygame.K_7:
+                      database.save(7)
+                  if event.key == pygame.K_8:
+                      database.save(8)
+                  if event.key == pygame.K_9:
+                      database.save(9)
+              else:
+                  if event.key == pygame.K_1:
+                      database.load(1)
+                  if event.key == pygame.K_2:
+                      database.load(2)
+                  if event.key == pygame.K_3:
+                      database.load(3)
+                  if event.key == pygame.K_4:
+                      database.load(4)
+                  if event.key == pygame.K_5:
+                      database.load(5)
+                  if event.key == pygame.K_6:
+                      database.load(6)
+                  if event.key == pygame.K_7:
+                      database.load(7)
+                  if event.key == pygame.K_8:
+                      database.load(8)
+                  if event.key == pygame.K_9:
+                      database.load(9)
+
               if event.key == pygame.K_LEFT:
                   if x > 0:
                       next_x -= velocity
