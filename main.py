@@ -14,10 +14,8 @@ state = {
 }
 #---------------------------------------------------------------------------------------------------------------------------------------
 def is_lose(next_x, next_y, image):
-   x = next_x
-   y = next_y
    window = screen.show_screen()
-   window.blit(image, (x, y))
+   window.blit(image, (next_x, next_y))
    font = pygame.font.SysFont("Arial", 120)
    text = font.render(consts.LOSE_MESSAGE, True, (255, 0, 0))
    window.blit(text, (consts.screen_w // 3, consts.screen_h // 3))
@@ -27,10 +25,8 @@ def is_lose(next_x, next_y, image):
    quit()
 #---------------------------------------------------------------------------------------------------------------------------------------
 def is_win(next_x, next_y, image):
-   x = next_x
-   y = next_y
    window = screen.show_screen()
-   window.blit(image, (x, y))
+   window.blit(image, (next_x, next_y))
    font = pygame.font.SysFont("Arial", 120)
    text = font.render(consts.LOSE_MESSAGE, True, (255, 0, 0))
    window.blit(text, (consts.screen_w // 3, consts.screen_h // 3))
