@@ -46,4 +46,5 @@ def on_teleport(playerX, playerY,regular_field):
 def teleport_to_random():
     random_teleport=random.choice(teleport_place)
     return random_teleport
+x = 67
 
