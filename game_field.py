@@ -1,3 +1,4 @@
+import guard
 import consts
 import random
 #---------------------------------------------------------------------------------------------------------------------------------------
@@ -83,6 +84,7 @@ def create_regular_field():
    real_field = add_player_space(real_field)
    real_field=add_grass(real_field)
    real_field=return_player_to_x(real_field)
+   real_field = guard.add_guard(real_field)
    return real_field
 #---------------------------------------------------------------------------------------------------------------------------------------
 # פעולה שיוצרת לוח משחק "לילי" עם פצצות , דגל ושחקן

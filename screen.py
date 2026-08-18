@@ -1,3 +1,4 @@
+import guard
 import game_field
 import pygame
 import consts
@@ -32,5 +33,7 @@ def show_screen():
         for x in range(len(field[y])):
             if field[y][x] == "grass":
                 screen.blit(pygame.transform.smoothscale(consts.grass, (consts.pixel, consts.pixel)), (x*consts.pixel , y*consts.pixel ))
+            elif field[y][x] == "guard":
+                screen.blit(pygame.transform.smoothscale(guard.guard_img, (consts.pixel * 2, consts.pixel * 4)), ( x * consts.pixel , (consts.screen_h //2) - 84))
     pygame.display.update()
     return screen
