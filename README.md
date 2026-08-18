@@ -1,6 +1,1 @@
-https://docs.google.com/document/d/1f3pvsLGB0TziWXYZGr9yC5gSquKNUJ5udpV7xTtyacU/edit?usp=sharing
-
-
-מקרי קצה : השחקן / הדגל מוקף בפצצות 
-
-
+https://docs.google.com/document/d/1PJgTEymS-Y47rcYKeAtcOzUQcN-xaFb9K7A0mRb4_Ww/edit?usp=sharing
