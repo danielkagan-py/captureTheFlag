@@ -1,5 +1,9 @@
 import consts
 import random
+
+import teleport
+
+
 #---------------------------------------------------------------------------------------------------------------------------------------
 # פעולה שיוצרת מטירצה ריקה(את לוח המשחק )
 def create_empty_field():
@@ -83,6 +87,7 @@ def create_regular_field():
    real_field = add_player_space(real_field)
    real_field=add_grass(real_field)
    real_field=return_player_to_x(real_field)
+   real_field=teleport.add_teleport(real_field)
    return real_field
 #---------------------------------------------------------------------------------------------------------------------------------------
 # פעולה שיוצרת לוח משחק "לילי" עם פצצות , דגל ושחקן
@@ -105,7 +110,7 @@ def is_path_exists(field):
         current_pos = positions_to_check.pop()
         y = current_pos[0]
         x = current_pos[1]
-        if field[y][x] == "flag" or field[y][x + 1] == "flag":
+        if field[y][x] == "flag" or field[y][x + 1] == "flag" or field[y][x] == "teleport" or field[y][x + 1] == "teleport":
             return True
         moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         for move in moves:
@@ -126,3 +131,4 @@ def create_good_Xray_field():
         test_field = create_Xray_field()
         if is_path_exists(test_field):
             return test_field
+print_field(create_regular_field())

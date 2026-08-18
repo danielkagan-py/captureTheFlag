@@ -1,6 +1,8 @@
 import game_field
 import pygame
 import consts
+import teleport
+
 #---------------------------------------------------------------------------------------------------------------------------------------
 MINE_IMG = "pics/mine.png"
 field1 = game_field.create_Xray_field()
@@ -32,5 +34,7 @@ def show_screen():
         for x in range(len(field[y])):
             if field[y][x] == "grass":
                 screen.blit(pygame.transform.smoothscale(consts.grass, (consts.pixel, consts.pixel)), (x*consts.pixel , y*consts.pixel ))
+            if field[y][x] == "teleport":
+                screen.blit(pygame.transform.smoothscale(teleport.teleport_image, (consts.pixel*2, consts.pixel*2)), (x * consts.pixel, y * consts.pixel))
     pygame.display.update()
     return screen
