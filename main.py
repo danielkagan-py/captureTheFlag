@@ -6,6 +6,7 @@ import consts
 import game_field
 import time
 import solider
+import Teleport
 #---------------------------------------------------------------------------------------------------------------------------------------
 state = {
  "is_mine_fired": False,
@@ -60,13 +61,13 @@ def main():
  x = 0
  y = 0
  clock = pygame.time.Clock()
- field = game_field.create_regular_field()
+ field = screen.field
  xray_field_fixed = screen.field1
- font = pygame.font.SysFont("Arial", 20)
- text = font.render("welcome to our game - Ariel,Daniel,Eliran", True, consts.black)
- window.blit(text, (consts.pixel*3, consts.pixel*1))
- pygame.display.update()
 
+ font = pygame.font.SysFont("Arial", 20)
+ text = font.render("welcome to our game- Ariel,Daniel,Eliran\ndont touch the mines (please)\n press enter to see the mines!", True,consts.black)
+ window.blit(text, (consts.pixel * 3, consts.pixel * 1))
+ pygame.display.update()
 
  while state["is_window_open"]:
      clock.tick(60)
@@ -91,7 +92,6 @@ def main():
              next_x = x
              next_y = y
 
-
              if event.key == pygame.K_1 or event.key ==pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9:  # key 'a'
                t = time.time()
          if event.type == pygame.KEYUP:
@@ -99,7 +99,6 @@ def main():
                  t = time.time() - t
                  t = str(t)
                  t = int(t[:1])
-
 
              if t >= 1:
                  if event.key == pygame.K_1:
@@ -140,7 +139,6 @@ def main():
                  if event.key == pygame.K_9:
                      database.load(9)
 
-
              if event.key == pygame.K_LEFT:
                  if x > 0:
                      next_x -= velocity
@@ -170,15 +168,22 @@ def main():
                     is_lose(image,x,y)
                  elif solider.got_flag(matrix_x, matrix_y, xray_field_fixed) or solider.got_flag(matrix_x + 1,matrix_y,xray_field_fixed) or (next_x >= 1316 and next_y >= 588):
                    is_win(image,x,y)
+                 elif Teleport.on_teleport(matrix_x, matrix_y, field) or Teleport.on_teleport(matrix_x + 1, matrix_y,
+                                                                                              field):
+                     cords = Teleport.teleport_to_random()
+                     x = cords[0]
+                     y = cords[1]
+                     window = screen.show_screen()
+
                  else:
                      x = next_x
                      y = next_y
                      window = screen.show_screen()
-                     # old_y, old_x = solider.get_legs(field)                         ניתן להפעיל במידה ורוצים לעדכן על מפת הדשא(הרגילה)
-                     # field[old_y][old_x] = "x"
-                     # field[old_y][old_x - 1] = "x"
-                     # field[matrix_y][matrix_x] = "player"
-                     # field[matrix_y][matrix_x + 1] = "player"
+                     old_y, old_x = solider.get_legs(field)                       # ניתן להפעיל במידה ורוצים לעדכן על מפת הדשא(הרגילה)
+                     field[old_y][old_x] = "x"
+                     field[old_y][old_x - 1] = "x"
+                     field[matrix_y][matrix_x] = "player"
+                     field[matrix_y][matrix_x + 1] = "player"
                      old_y_xray, old_x_xray = solider.get_legs(xray_field_fixed)
                      xray_field_fixed[old_y_xray][old_x_xray] = "x"
                      xray_field_fixed[old_y_xray][old_x_xray - 1] = "x"
