@@ -24,21 +24,23 @@ def show_mines():
    pygame.display.update()
    return screen1
 #---------------------------------------------------------------------------------------------------------------------------------------
-field = game_field.create_regular_field()
+field , list_of_tp = game_field.create_regular_field()
 screen = pygame.display.set_mode((consts.screen_w, consts.screen_h))
 #---------------------------------------------------------------------------------------------------------------------------------------
 # פעולה שמציירת את הלוח המקורי שמשחקים עליו ושמה את הדשא במקומות המתאימים
 def show_screen():
-    screen.fill(consts.green)
-    for y in range(len(field)):
-        for x in range(len(field[y])):
-            if field[y][x] == "grass":
-                screen.blit(pygame.transform.smoothscale(consts.grass, (consts.pixel, consts.pixel)), (x*consts.pixel , y*consts.pixel ))
-            if field[y][x] == "guard":
-                screen.blit(pygame.transform.smoothscale(guard.guard_img, (consts.pixel * 2, consts.pixel * 4)), ( x * consts.pixel , (consts.screen_h //2) - 84))
-            if field[y][x] == "teleport":
-                screen.blit(pygame.transform.smoothscale(Teleport.teleport_image, (consts.pixel * 2, consts.pixel * 2)),
+   screen.fill(consts.green)
+   for y in range(len(field)):
+       for x in range(len(field[y])):
+           if field[y][x] == "grass":
+               screen.blit(pygame.transform.smoothscale(consts.grass, (consts.pixel, consts.pixel)), (x*consts.pixel , y*consts.pixel ))
+           if field[y][x] == "guard":
+               screen.blit(pygame.transform.smoothscale(guard.guard_img, (consts.pixel * 2, consts.pixel * 4)), ( x * consts.pixel , (consts.screen_h //2) - 84))
+           if field[y][x] == "teleport" and field[y][x - 1] == "teleport" and field[y][x + 1] == "teleport" :
+               screen.blit(pygame.transform.smoothscale(consts.hole, (consts.pixel * 3, consts.pixel)),
                             (x * consts.pixel, y * consts.pixel))
+   pygame.display.update()
+   return screen
 
-    pygame.display.update()
-    return screen
+
+

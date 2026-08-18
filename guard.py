@@ -12,13 +12,35 @@ def add_guard(field):
     field[23][0] = "guard"
     return field
 #---------------------------------------------------------------------------------------------------------------------------------------
-def guard_out_of_board(playerX ):
-    if playerX < 0 or playerX >49:
-        return True
-    else:
-        return False
+def on_guard(x,y,field):
+    if 0 <= y < len(field) and 0 <= x < len(field[y]):
+        if field[y][x] == "guard":
+            return True
+    return False
+# ---------------------------------------------------------------------------------------------------------------
+def move_gurad_back(x):
+    x -= consts.pixel
+    return x
+
+def move_gurad_matrix_back(field):
+
+    for col in range(consts.matriz_rows):
+        if not to_left and field[y][col] == "guard":
+            field[y][col] = "x"
+            field[y][col - 1] = "guard"
+        elif to_left and field[y][col] == "guard":
+            field[y][col] = "x"
+            field[y][col + 1] = "guard"
+        else:
+            field = field
+    return field
 #---------------------------------------------------------------------------------------------------------------------------------------
-def move_gurad(field):
+def move_gurad(x):
+    x+=consts.pixel
+    return x
+
+def move_gurad_matrix(field):
+
     for col in range(consts.matriz_rows):
         if not to_left and field[y][col] == "guard" :
             field[y][col] = "x"
@@ -30,10 +52,3 @@ def move_gurad(field):
             field = field
     return field
 #---------------------------------------------------------------------------------------------------------------------------------------
-def board_accident(reg_field , xray_field):
-    crush = False
-    for row in range(consts.matriz_rows):
-        for col in range(consts.matriz_cols):
-            if reg_field[row][col] == "guard" and xray_field[row][col] == "player":
-                crush = True
-    return crush

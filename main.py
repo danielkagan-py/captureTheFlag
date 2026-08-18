@@ -3,12 +3,12 @@ import guard
 import database
 import screen
 import consts
-import game_field
 import time
 import solider
 import Teleport
 #---------------------------------------------------------------------------------------------------------------------------------------
 state = {
+ "back":False,
  "is_mine_fired": False,
  "is_window_open": True,
  "state": consts.RUNNING_STATE,
@@ -47,16 +47,20 @@ def is_win(image,x,y):
 #---------------------------------------------------------------------------------------------------------------------------------------
 # המחלקה הראשית שמריצה את המשחק
 def main():
+
  t = 0
  count = 0
  clock = pygame.time.Clock()
  pygame.init()
+ guard_x=0
+ guard_y=consts.pixel*(consts.ROWS//2)-84
  window = screen.show_screen()
  pygame.display.set_caption('THE game')
  image = consts.player
  image = pygame.transform.scale(image, ((consts.pixel*2, consts.pixel*4)))
  imageflag = consts.flag
  imageflag = pygame.transform.scale(imageflag, (consts.pixel * 3, consts.pixel *4))
+ gaurd = pygame.transform.scale(guard.guard_img, (consts.pixel * 2, consts.pixel * 4))
  velocity = consts.pixel
  x = 0
  y = 0
@@ -68,11 +72,37 @@ def main():
  text = font.render("welcome to our game- Ariel,Daniel,Eliran\ndont touch the mines (please)\n press enter to see the mines!", True,consts.black)
  window.blit(text, (consts.pixel * 3, consts.pixel * 1))
  pygame.display.update()
+ count=0
 
  while state["is_window_open"]:
-     clock.tick(60)
+     count+=1
+
+     if guard_x >consts.pixel*(consts.COL-2):
+         state["back"]=True
+     if guard_x <1:
+
+         state["back"] = False
+     if count==200:
+         if state["back"]==False:
+
+            guard_x=guard.move_gurad(guard_x)
+            field=guard.move_gurad_matrix(field)
+            window = screen.show_screen()
+            count =0
+         else:
+
+             guard_x = guard.move_gurad_back(guard_x)
+             field = guard.move_gurad_matrix_back(field)
+             window = screen.show_screen()
+             count = 0
+
+
+
      window.blit(image, (x, y))
+     window.blit(gaurd, (guard_x, guard_y))
      window.blit(imageflag, (consts.pixel * (consts.COL - 4),consts.pixel *( consts.ROWS - 4)))
+
+
      for event in pygame.event.get():
          if event.type == pygame.QUIT:
              pygame.quit()
@@ -83,6 +113,8 @@ def main():
                  screen.show_mines()
                  new_player_img = consts.night_player
                  new_player_img = pygame.transform.scale(new_player_img, (consts.pixel*2, consts.pixel*4))
+
+
                  window.blit(new_player_img, (x, y))
                  pygame.display.update()
                  time.sleep(1)
@@ -102,23 +134,24 @@ def main():
 
              if t >= 1:
                  if event.key == pygame.K_1:
-                     database.save(1)
+                     database.save(1, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_2:
-                     database.save(2)
+                     database.save(2, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_3:
-                     database.save(3)
+                     database.save(3, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_4:
-                     database.save(4)
+                     database.save(4, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_5:
-                     database.save(5)
+                     database.save(5, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_6:
-                     database.save(6)
+                     database.save(6, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_7:
-                     database.save(7)
+                     database.save(7, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_8:
-                     database.save(8)
+                     database.save(8, int(x), int(y), xray_field_fixed, field)
                  if event.key == pygame.K_9:
-                     database.save(9)
+                     database.save(9, int(x), int(y), xray_field_fixed, field)
+
              else:
                  if event.key == pygame.K_1:
                      database.load(1)
@@ -159,8 +192,6 @@ def main():
                      next_y += velocity
                      moved = True
                      count += 1
-             if count % 4 == 0 :
-                 field = guard.move_gurad(field)
              if moved:
                  matrix_x = next_x // consts.pixel
                  matrix_y = (next_y // consts.pixel) + 3
@@ -169,19 +200,31 @@ def main():
                  elif solider.got_flag(matrix_x, matrix_y, xray_field_fixed) or solider.got_flag(matrix_x + 1,matrix_y,xray_field_fixed) or (next_x >= 1316 and next_y >= 588):
                    is_win(image,x,y)
                  elif Teleport.on_teleport(matrix_x, matrix_y, field) or Teleport.on_teleport(matrix_x + 1, matrix_y,
-                                                                                              field):
-                     cords = Teleport.teleport_to_random()
-                     x = cords[0]
-                     y = cords[1]
-                     window = screen.show_screen()
+                                                                                                field):
+                   cords = Teleport.teleport_to_random(screen.list_of_tp)
+                   x = ((cords[0]) + 1) * consts.pixel
+                   y = ((cords[1]) - 3) * consts.pixel
+                   window = screen.show_screen()
+
+
+
+
+                 elif guard.on_guard(x,y,field) or guard.on_guard(x+1,y,field):
+                     is_lose(image, x, y)
 
                  else:
                      x = next_x
                      y = next_y
                      window = screen.show_screen()
                      old_y, old_x = solider.get_legs(field)                       # ניתן להפעיל במידה ורוצים לעדכן על מפת הדשא(הרגילה)
-                     field[old_y][old_x] = "x"
-                     field[old_y][old_x - 1] = "x"
+                     if field[old_y][old_x] == "grass":
+                        field[old_y][old_x] = "grass"
+                     else:
+                         field[old_y][old_x] = "x"
+                     if field[old_y][old_x - 1] == "grass":
+                         field[old_y][old_x - 1] = "grass"
+                     else:
+                         field[old_y][old_x - 1] = "x"
                      field[matrix_y][matrix_x] = "player"
                      field[matrix_y][matrix_x + 1] = "player"
                      old_y_xray, old_x_xray = solider.get_legs(xray_field_fixed)

@@ -78,16 +78,17 @@ def return_player_to_x(field):
    return field
 #---------------------------------------------------------------------------------------------------------------------------------------
 # פעולה שיוצרת לוח משחק רגיל עם דשא , דגל ושחקן
+# פעולה שיוצרת לוח משחק רגיל עם דשא , דגל ושחקן
 def create_regular_field():
-   real_field=[]
-   real_field = create_empty_field()
-   real_field = add_flag(real_field)
-   real_field = add_player_space(real_field)
-   real_field=add_grass(real_field)
-   real_field=return_player_to_x(real_field)
-   real_field = guard.add_guard(real_field)
-   real_field = Teleport.add_teleport(real_field)
-   return real_field
+  real_field=[]
+  real_field = create_empty_field()
+  real_field = add_flag(real_field)
+  real_field = add_player_space(real_field)
+  real_field=add_grass(real_field)
+  real_field=return_player_to_x(real_field)
+
+  real_field , list_of_tp = Teleport.add_teleport(real_field)
+  return real_field , list_of_tp
 #---------------------------------------------------------------------------------------------------------------------------------------
 # פעולה שיוצרת לוח משחק "לילי" עם פצצות , דגל ושחקן
 def create_Xray_field():
